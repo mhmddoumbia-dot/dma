@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="finance_green">#1B5E20</color>
+    <color name="finance_green_light">#A5D6A7</color>
+    <color name="finance_black">#1B1B1B</color>
+    <color name="finance_white">#FFFFFF</color>
+</resources>

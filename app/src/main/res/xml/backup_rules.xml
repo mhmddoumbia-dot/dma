@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- La base de données locale contient des données financières sensibles :
+     elle est exclue de la sauvegarde automatique Android. -->
+<full-backup-content>
+    <exclude domain="database" path="." />
+</full-backup-content>

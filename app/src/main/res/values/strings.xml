@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Gestion Finances</string>
+
+    <!-- Authentification -->
+    <string name="auth_login_title">Connexion</string>
+    <string name="auth_register_title">Créer un compte</string>
+    <string name="auth_full_name">Nom complet</string>
+    <string name="auth_email">Adresse e-mail</string>
+    <string name="auth_password">Mot de passe</string>
+    <string name="auth_confirm_password">Confirmer le mot de passe</string>
+    <string name="auth_login_button">Se connecter</string>
+    <string name="auth_register_button">S\'inscrire</string>
+    <string name="auth_no_account">Pas encore de compte ? Inscrivez-vous</string>
+    <string name="auth_have_account">Déjà un compte ? Connectez-vous</string>
+    <string name="auth_error_invalid_credentials">E-mail ou mot de passe incorrect</string>
+    <string name="auth_error_email_taken">Cette adresse e-mail est déjà utilisée</string>
+    <string name="auth_error_passwords_mismatch">Les mots de passe ne correspondent pas</string>
+    <string name="auth_error_required_fields">Veuillez remplir tous les champs</string>
+
+    <!-- Projets -->
+    <string name="projects_title">Mes projets financiers</string>
+    <string name="projects_empty">Aucun projet pour le moment. Créez-en un pour commencer.</string>
+    <string name="projects_create">Nouveau projet</string>
+    <string name="projects_name">Nom du projet</string>
+    <string name="projects_description">Description (facultatif)</string>
+    <string name="projects_currency">Devise</string>
+    <string name="projects_members">Membres</string>
+    <string name="projects_invite_member">Ajouter un membre</string>
+    <string name="projects_role_owner">Propriétaire</string>
+    <string name="projects_role_admin">Administrateur</string>
+    <string name="projects_role_member">Membre</string>
+    <string name="projects_role_viewer">Lecteur</string>
+    <string name="projects_leave">Quitter le projet</string>
+    <string name="projects_delete">Supprimer le projet</string>
+
+    <!-- Navigation / sections -->
+    <string name="nav_dashboard">Tableau de bord</string>
+    <string name="nav_transactions">Transactions</string>
+    <string name="nav_budgets">Budgets</string>
+    <string name="nav_reports">Rapports</string>
+    <string name="nav_settings">Paramètres</string>
+
+    <!-- Tableau de bord -->
+    <string name="dashboard_total_balance">Solde total</string>
+    <string name="dashboard_income">Revenus</string>
+    <string name="dashboard_expenses">Dépenses</string>
+    <string name="dashboard_recent_transactions">Transactions récentes</string>
+    <string name="dashboard_accounts">Comptes</string>
+    <string name="dashboard_no_transactions">Aucune transaction pour l\'instant</string>
+
+    <!-- Comptes -->
+    <string name="accounts_title">Comptes</string>
+    <string name="accounts_add">Ajouter un compte</string>
+    <string name="accounts_name">Nom du compte</string>
+    <string name="accounts_type">Type de compte</string>
+    <string name="accounts_initial_balance">Solde initial</string>
+
+    <!-- Catégories -->
+    <string name="categories_title">Catégories</string>
+    <string name="categories_add">Ajouter une catégorie</string>
+    <string name="categories_name">Nom de la catégorie</string>
+    <string name="categories_color">Couleur</string>
+
+    <!-- Transactions -->
+    <string name="transactions_add">Nouvelle transaction</string>
+    <string name="transactions_edit">Modifier la transaction</string>
+    <string name="transactions_amount">Montant</string>
+    <string name="transactions_type">Type</string>
+    <string name="transactions_type_income">Revenu</string>
+    <string name="transactions_type_expense">Dépense</string>
+    <string name="transactions_account">Compte</string>
+    <string name="transactions_category">Catégorie</string>
+    <string name="transactions_date">Date</string>
+    <string name="transactions_note">Note (facultatif)</string>
+    <string name="transactions_delete_confirm">Supprimer cette transaction ?</string>
+    <string name="transactions_filter_all">Toutes</string>
+
+    <!-- Budgets -->
+    <string name="budgets_title">Budgets</string>
+    <string name="budgets_add">Nouveau budget</string>
+    <string name="budgets_amount_limit">Montant limite</string>
+    <string name="budgets_period">Période</string>
+    <string name="budgets_period_monthly">Mensuel</string>
+    <string name="budgets_period_weekly">Hebdomadaire</string>
+    <string name="budgets_period_yearly">Annuel</string>
+    <string name="budgets_spent_of">%1$s dépensés sur %2$s</string>
+    <string name="budgets_exceeded">Budget dépassé</string>
+
+    <!-- Rapports -->
+    <string name="reports_by_category">Dépenses par catégorie</string>
+    <string name="reports_by_month">Évolution mensuelle</string>
+    <string name="reports_no_data">Pas encore de données à afficher</string>
+
+    <!-- Paramètres -->
+    <string name="settings_title">Paramètres</string>
+    <string name="settings_account_section">Compte</string>
+    <string name="settings_logout">Se déconnecter</string>
+    <string name="settings_current_project">Projet actif</string>
+    <string name="settings_switch_project">Changer de projet</string>
+    <string name="settings_about">À propos</string>
+
+    <!-- Actions génériques -->
+    <string name="action_save">Enregistrer</string>
+    <string name="action_cancel">Annuler</string>
+    <string name="action_delete">Supprimer</string>
+    <string name="action_edit">Modifier</string>
+    <string name="action_confirm">Confirmer</string>
+    <string name="action_back">Retour</string>
+</resources>
