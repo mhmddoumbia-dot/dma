@@ -154,7 +154,11 @@ class ExcelImporter @Inject constructor(
                         rowsSkipped++
                         continue
                     }
-                    val category = resolveCategory(categoryName, CategoryType.EXPENSE) ?: run { rowsSkipped++; continue }
+                    val category = resolveCategory(categoryName, CategoryType.EXPENSE)
+                    if (category == null) {
+                        rowsSkipped++
+                        continue
+                    }
                     budgetDao.insert(
                         BudgetEntity(
                             projectId = projectId,
