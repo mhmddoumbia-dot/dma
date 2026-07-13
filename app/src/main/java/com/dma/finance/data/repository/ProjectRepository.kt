@@ -1,9 +1,12 @@
 package com.dma.finance.data.repository
 
+import com.dma.finance.data.local.dao.AccountDao
 import com.dma.finance.data.local.dao.CategoryDao
 import com.dma.finance.data.local.dao.ProjectDao
 import com.dma.finance.data.local.dao.ProjectMemberDao
 import com.dma.finance.data.local.dao.UserDao
+import com.dma.finance.data.local.entity.AccountEntity
+import com.dma.finance.data.local.entity.AccountType
 import com.dma.finance.data.local.entity.ProjectEntity
 import com.dma.finance.data.local.entity.ProjectMemberEntity
 import com.dma.finance.data.local.entity.ProjectRole
@@ -30,6 +33,7 @@ class ProjectRepository @Inject constructor(
     private val projectDao: ProjectDao,
     private val projectMemberDao: ProjectMemberDao,
     private val categoryDao: CategoryDao,
+    private val accountDao: AccountDao,
     private val userDao: UserDao,
     private val sessionManager: SessionManager
 ) {
@@ -63,6 +67,7 @@ class ProjectRepository @Inject constructor(
             ProjectMemberEntity(projectId = projectId, userId = ownerUserId, role = ProjectRole.OWNER)
         )
         DefaultCategories.forProject(projectId).forEach { categoryDao.insert(it) }
+        accountDao.insert(AccountEntity(projectId = projectId, name = "Espèces", type = AccountType.CASH))
         sessionManager.setCurrentProject(projectId)
         return projectId
     }

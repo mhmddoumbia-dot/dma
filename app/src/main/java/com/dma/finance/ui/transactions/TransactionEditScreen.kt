@@ -112,6 +112,14 @@ fun TransactionEditScreen(
                 .padding(24.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
+            if (accounts.isEmpty()) {
+                Text(
+                    text = stringResource(R.string.transactions_no_accounts_hint),
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            }
+
             SingleChoiceSegmentedButtonRow(modifier = Modifier.fillMaxWidth()) {
                 TransactionType.values().forEachIndexed { index, t ->
                     SegmentedButton(

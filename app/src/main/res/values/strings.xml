@@ -75,6 +75,7 @@
     <string name="transactions_note">Note (facultatif)</string>
     <string name="transactions_delete_confirm">Supprimer cette transaction ?</string>
     <string name="transactions_filter_all">Toutes</string>
+    <string name="transactions_no_accounts_hint">Créez d\'abord un compte (Paramètres → Comptes) pour pouvoir enregistrer une transaction.</string>
 
     <!-- Budgets -->
     <string name="budgets_title">Budgets</string>
