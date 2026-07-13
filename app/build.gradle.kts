@@ -90,6 +90,10 @@ dependencies {
     // Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1")
 
+    // Import / export Excel (.xlsx) — bibliothèque légère, sans dépendance AWT
+    implementation("org.dhatim:fastexcel:0.20.2")
+    implementation("org.dhatim:fastexcel-reader:0.20.2")
+
     // Tests
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.2.1")

@@ -100,6 +100,13 @@
     <string name="settings_current_project">Projet actif</string>
     <string name="settings_switch_project">Changer de projet</string>
     <string name="settings_about">À propos</string>
+    <string name="settings_export_excel">Exporter ce projet (Excel)</string>
+    <string name="settings_export_excel_hint">Comptes, catégories, transactions et budgets dans un fichier .xlsx</string>
+    <string name="settings_import_excel">Importer dans ce projet (Excel)</string>
+    <string name="settings_import_excel_hint">Depuis un fichier .xlsx exporté par l\'application</string>
+    <string name="settings_export_success">Export réussi</string>
+    <string name="settings_import_success">Import terminé : %1$d transaction(s), %2$d compte(s) créé(s), %3$d catégorie(s) créée(s), %4$d budget(s)</string>
+    <string name="settings_transfer_error">Échec de l\'opération : %1$s</string>
 
     <!-- Actions génériques -->
     <string name="action_save">Enregistrer</string>
