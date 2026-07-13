@@ -32,7 +32,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.dma.finance.R
 import com.dma.finance.data.local.entity.ProjectEntity
 
-@androidx.compose.material3.ExperimentalMaterial3Api
+@OptIn(androidx.compose.material3.ExperimentalMaterial3Api::class)
 @Composable
 fun ProjectListScreen(
     onProjectSelected: (Long) -> Unit,
