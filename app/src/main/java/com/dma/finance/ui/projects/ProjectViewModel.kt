@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
@@ -45,10 +46,14 @@ class ProjectViewModel @Inject constructor(
     val createState: StateFlow<CreateProjectUiState> = _createState.asStateFlow()
 
     fun createProject(name: String, description: String, currencyCode: String) {
-        val ownerId = currentUserId.value ?: return
         if (name.isBlank()) return
         _createState.value = CreateProjectUiState(isSaving = true)
         viewModelScope.launch {
+            val ownerId = authRepository.currentUser.first()?.id
+            if (ownerId == null) {
+                _createState.value = CreateProjectUiState()
+                return@launch
+            }
             val id = projectRepository.createProject(name, description, currencyCode, ownerId)
             _createState.value = CreateProjectUiState(createdProjectId = id)
         }
