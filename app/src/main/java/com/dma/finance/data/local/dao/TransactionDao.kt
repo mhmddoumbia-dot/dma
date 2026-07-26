@@ -32,7 +32,7 @@ interface TransactionDao {
             t.id, t.projectId, t.accountId, a.name AS accountName,
             t.categoryId, c.name AS categoryName, c.icon AS categoryIcon, c.colorHex AS categoryColor,
             t.recordedByUserId, u.fullName AS recordedByName,
-            t.type, t.amountMinor, t.date, t.note, t.transferToAccountId
+            t.type, t.amountMinor, t.date, t.note, t.transferToAccountId, t.receiptPhotoPath
         FROM transactions t
         INNER JOIN accounts a ON a.id = t.accountId
         LEFT JOIN categories c ON c.id = t.categoryId
@@ -49,7 +49,7 @@ interface TransactionDao {
             t.id, t.projectId, t.accountId, a.name AS accountName,
             t.categoryId, c.name AS categoryName, c.icon AS categoryIcon, c.colorHex AS categoryColor,
             t.recordedByUserId, u.fullName AS recordedByName,
-            t.type, t.amountMinor, t.date, t.note, t.transferToAccountId
+            t.type, t.amountMinor, t.date, t.note, t.transferToAccountId, t.receiptPhotoPath
         FROM transactions t
         INNER JOIN accounts a ON a.id = t.accountId
         LEFT JOIN categories c ON c.id = t.categoryId

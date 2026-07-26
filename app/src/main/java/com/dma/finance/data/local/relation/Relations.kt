@@ -33,7 +33,8 @@ data class TransactionWithDetails(
     val amountMinor: Long,
     val date: Long,
     val note: String,
-    val transferToAccountId: Long?
+    val transferToAccountId: Long?,
+    val receiptPhotoPath: String?
 )
 
 /** Total dépensé/reçu pour une catégorie sur une période, utilisé par l'écran Rapports. */

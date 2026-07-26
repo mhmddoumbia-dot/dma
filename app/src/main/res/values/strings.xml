@@ -73,6 +73,9 @@
     <string name="transactions_category">Catégorie</string>
     <string name="transactions_date">Date</string>
     <string name="transactions_note">Note (facultatif)</string>
+    <string name="transactions_receipt">Pièce justificative</string>
+    <string name="transactions_take_photo">Prendre une photo</string>
+    <string name="transactions_remove_photo">Supprimer la photo</string>
     <string name="transactions_delete_confirm">Supprimer cette transaction ?</string>
     <string name="transactions_filter_all">Toutes</string>
     <string name="transactions_no_accounts_hint">Créez d\'abord un compte (Paramètres → Comptes) pour pouvoir enregistrer une transaction.</string>

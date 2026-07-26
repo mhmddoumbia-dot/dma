@@ -1,13 +1,19 @@
 package com.dma.finance.ui.transactions
 
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.CameraAlt
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Button
 import androidx.compose.material3.DatePicker
@@ -36,6 +42,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -44,6 +51,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.dma.finance.R
 import com.dma.finance.data.local.entity.CategoryType
 import com.dma.finance.data.local.entity.TransactionType
+import com.dma.finance.ui.components.ReceiptThumbnail
 import com.dma.finance.util.CurrencyFormatter
 import com.dma.finance.util.DateUtils
 
@@ -65,6 +73,21 @@ fun TransactionEditScreen(
     var note by remember { mutableStateOf("") }
     var dateMillis by remember { mutableStateOf(System.currentTimeMillis()) }
     var showDatePicker by remember { mutableStateOf(false) }
+    var receiptPath by remember { mutableStateOf<String?>(null) }
+    var pendingCameraPath by remember { mutableStateOf<String?>(null) }
+
+    val takePictureLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.TakePicture()
+    ) { success ->
+        val capturedPath = pendingCameraPath
+        pendingCameraPath = null
+        if (success && capturedPath != null) {
+            receiptPath?.let { previous -> if (previous != capturedPath) viewModel.discardReceiptFile(previous) }
+            receiptPath = capturedPath
+        } else {
+            viewModel.discardReceiptFile(capturedPath)
+        }
+    }
 
     LaunchedEffect(accounts) {
         if (accountId == 0L && accounts.isNotEmpty()) accountId = accounts.first().id
@@ -79,6 +102,7 @@ fun TransactionEditScreen(
             amountText = (transaction.amountMinor / 100.0).toString()
             note = transaction.note
             dateMillis = transaction.date
+            receiptPath = transaction.receiptPhotoPath
         }
     }
 
@@ -181,10 +205,35 @@ fun TransactionEditScreen(
                 modifier = Modifier.fillMaxWidth()
             )
 
+            Text(stringResource(R.string.transactions_receipt), style = MaterialTheme.typography.bodyMedium)
+            if (receiptPath != null) {
+                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                    ReceiptThumbnail(path = receiptPath!!)
+                    IconButton(onClick = {
+                        viewModel.discardReceiptFile(receiptPath)
+                        receiptPath = null
+                    }) {
+                        Icon(Icons.Default.Close, contentDescription = stringResource(R.string.transactions_remove_photo))
+                    }
+                }
+            } else {
+                OutlinedButton(
+                    onClick = {
+                        val (uri, path) = viewModel.createReceiptDestination()
+                        pendingCameraPath = path
+                        takePictureLauncher.launch(uri)
+                    },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Icon(Icons.Default.CameraAlt, contentDescription = null)
+                    Text(stringResource(R.string.transactions_take_photo), modifier = Modifier.padding(start = 8.dp))
+                }
+            }
+
             Button(
                 onClick = {
                     val minor = CurrencyFormatter.parseToMinor(amountText) ?: return@Button
-                    viewModel.save(type, accountId, categoryId, minor, dateMillis, note, transferToAccountId)
+                    viewModel.save(type, accountId, categoryId, minor, dateMillis, note, transferToAccountId, receiptPath)
                 },
                 enabled = amountText.isNotBlank() && accountId > 0,
                 modifier = Modifier.fillMaxWidth()

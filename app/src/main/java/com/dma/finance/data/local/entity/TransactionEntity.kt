@@ -58,5 +58,7 @@ data class TransactionEntity(
     val note: String = "",
     /** Renseigné uniquement pour un [TransactionType.TRANSFER] : compte de destination. */
     val transferToAccountId: Long? = null,
+    /** Chemin absolu local vers la photo de la pièce justificative, si une a été prise. */
+    val receiptPhotoPath: String? = null,
     val createdAt: Long = System.currentTimeMillis()
 )

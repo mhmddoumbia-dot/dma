@@ -1,5 +1,6 @@
 package com.dma.finance.ui.transactions
 
+import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -7,6 +8,7 @@ import com.dma.finance.data.local.entity.AccountEntity
 import com.dma.finance.data.local.entity.CategoryEntity
 import com.dma.finance.data.local.entity.TransactionEntity
 import com.dma.finance.data.local.entity.TransactionType
+import com.dma.finance.data.media.PhotoStorage
 import com.dma.finance.data.repository.AccountRepository
 import com.dma.finance.data.repository.AuthRepository
 import com.dma.finance.data.repository.CategoryRepository
@@ -17,7 +19,6 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -28,7 +29,8 @@ class TransactionEditViewModel @Inject constructor(
     private val transactionRepository: TransactionRepository,
     private val accountRepository: AccountRepository,
     private val categoryRepository: CategoryRepository,
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
+    private val photoStorage: PhotoStorage
 ) : ViewModel() {
 
     val projectId: Long = checkNotNull(savedStateHandle["projectId"])
@@ -43,6 +45,14 @@ class TransactionEditViewModel @Inject constructor(
 
     private val _saved = MutableStateFlow(false)
     val saved: StateFlow<Boolean> = _saved.asStateFlow()
+
+    /** Crée un nouveau fichier destiné à recevoir une photo de justificatif et son Uri pour l'intent caméra. */
+    fun createReceiptDestination(): Pair<Uri, String> = photoStorage.createReceiptDestination()
+
+    /** Supprime un fichier photo local, par exemple après une capture annulée ou un remplacement. */
+    fun discardReceiptFile(path: String?) {
+        photoStorage.deleteReceipt(path)
+    }
 
     fun loadExisting(onLoaded: (TransactionEntity) -> Unit) {
         val id = transactionId ?: return
@@ -61,7 +71,8 @@ class TransactionEditViewModel @Inject constructor(
                     amountMinor = existing.amountMinor,
                     date = existing.date,
                     note = existing.note,
-                    transferToAccountId = existing.transferToAccountId
+                    transferToAccountId = existing.transferToAccountId,
+                    receiptPhotoPath = existing.receiptPhotoPath
                 )
             )
         }
@@ -74,11 +85,19 @@ class TransactionEditViewModel @Inject constructor(
         amountMinor: Long,
         date: Long,
         note: String,
-        transferToAccountId: Long?
+        transferToAccountId: Long?,
+        receiptPhotoPath: String?
     ) {
         if (accountId <= 0 || amountMinor <= 0) return
         viewModelScope.launch {
             val userId = authRepository.currentUser.first()?.id ?: return@launch
+            if (isEditing) {
+                val previousPath = transactionRepository.observeTransactionsForProject(projectId).first()
+                    .firstOrNull { it.id == transactionId }?.receiptPhotoPath
+                if (previousPath != null && previousPath != receiptPhotoPath) {
+                    photoStorage.deleteReceipt(previousPath)
+                }
+            }
             val transaction = TransactionEntity(
                 id = transactionId ?: 0L,
                 projectId = projectId,
@@ -89,7 +108,8 @@ class TransactionEditViewModel @Inject constructor(
                 amountMinor = amountMinor,
                 date = date,
                 note = note,
-                transferToAccountId = if (type == TransactionType.TRANSFER) transferToAccountId else null
+                transferToAccountId = if (type == TransactionType.TRANSFER) transferToAccountId else null,
+                receiptPhotoPath = receiptPhotoPath
             )
             if (isEditing) {
                 transactionRepository.updateTransaction(transaction)
@@ -116,9 +136,11 @@ class TransactionEditViewModel @Inject constructor(
                     amountMinor = existing.amountMinor,
                     date = existing.date,
                     note = existing.note,
-                    transferToAccountId = existing.transferToAccountId
+                    transferToAccountId = existing.transferToAccountId,
+                    receiptPhotoPath = existing.receiptPhotoPath
                 )
             )
+            photoStorage.deleteReceipt(existing.receiptPhotoPath)
             _saved.value = true
         }
     }
