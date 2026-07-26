@@ -3,6 +3,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("com.google.devtools.ksp")
     id("com.google.dagger.hilt.android")
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -93,6 +94,12 @@ dependencies {
     // Import / export Excel (.xlsx) — bibliothèque légère, sans dépendance AWT
     implementation("org.dhatim:fastexcel:0.20.2")
     implementation("org.dhatim:fastexcel-reader:0.20.2")
+
+    // Firebase (authentification + synchronisation en ligne)
+    implementation(platform("com.google.firebase:firebase-bom:33.1.2"))
+    implementation("com.google.firebase:firebase-auth-ktx")
+    implementation("com.google.firebase:firebase-firestore-ktx")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.8.1")
 
     // Tests
     testImplementation("junit:junit:4.13.2")
