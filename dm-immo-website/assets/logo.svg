@@ -1,0 +1,33 @@
+<svg width="240" height="240" viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="DM Immo">
+  <defs>
+    <linearGradient id="navyGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0B2D5B"/>
+      <stop offset="1" stop-color="#123a73"/>
+    </linearGradient>
+    <linearGradient id="grayGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#7d8085"/>
+      <stop offset="1" stop-color="#565a5f"/>
+    </linearGradient>
+  </defs>
+
+  <!-- D shape -->
+  <path d="M40 20 H100 C148 20 178 58 178 110 C178 162 148 200 100 200 H40 V166 H60 V54 H40 Z
+           M60 54 V166 H98 C130 166 144 142 144 110 C144 78 130 54 98 54 H60 Z"
+        fill="url(#navyGrad)"/>
+
+  <!-- M shape -->
+  <path d="M96 200 L96 88 L128 138 L160 60 L160 200 L184 200 L184 42 L156 42 L128 108 L104 42 L96 42 Z"
+        fill="url(#grayGrad)"/>
+
+  <!-- building accent inside the M -->
+  <g fill="#0B2D5B">
+    <rect x="104" y="150" width="16" height="50"/>
+    <rect x="122" y="128" width="18" height="72"/>
+    <rect x="142" y="160" width="14" height="40"/>
+    <rect x="106" y="156" width="4" height="4" fill="#f4c95d"/>
+    <rect x="106" y="166" width="4" height="4" fill="#f4c95d"/>
+    <rect x="126" y="136" width="4" height="4" fill="#f4c95d"/>
+    <rect x="126" y="146" width="4" height="4" fill="#f4c95d"/>
+    <rect x="126" y="156" width="4" height="4" fill="#f4c95d"/>
+  </g>
+</svg>
