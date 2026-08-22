@@ -28,7 +28,7 @@ import com.dma.finance.data.local.entity.UserEntity
         TransactionEntity::class,
         BudgetEntity::class
     ],
-    version = 2,
+    version = 3,
     exportSchema = false
 )
 @TypeConverters(Converters::class)

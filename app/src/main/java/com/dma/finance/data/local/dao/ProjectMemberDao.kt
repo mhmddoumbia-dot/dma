@@ -29,6 +29,15 @@ interface ProjectMemberDao {
     @Query("SELECT * FROM project_members WHERE projectId = :projectId AND userId = :userId LIMIT 1")
     suspend fun findMember(projectId: Long, userId: Long): ProjectMemberEntity?
 
+    @Query("SELECT * FROM project_members WHERE projectId = :projectId AND firebaseId = :firebaseId LIMIT 1")
+    suspend fun findByFirebaseId(projectId: Long, firebaseId: String): ProjectMemberEntity?
+
+    @Query("SELECT * FROM project_members WHERE projectId = :projectId")
+    suspend fun findAllForProjectOnce(projectId: Long): List<ProjectMemberEntity>
+
+    @Query("SELECT * FROM project_members WHERE memberFirebaseUid IS NULL")
+    suspend fun findAllWithoutFirebaseUid(): List<ProjectMemberEntity>
+
     @Query("SELECT * FROM project_members WHERE projectId = :projectId AND userId = :userId LIMIT 1")
     fun observeMember(projectId: Long, userId: Long): Flow<ProjectMemberEntity?>
 

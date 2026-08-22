@@ -4,6 +4,7 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
+import java.util.UUID
 
 /**
  * Un projet financier (ex: "Famille", "Association", "Petit commerce").
@@ -29,5 +30,7 @@ data class ProjectEntity(
     val description: String = "",
     val currencyCode: String = "XOF",
     val ownerId: Long,
+    /** Identifiant stable utilisé pour synchroniser ce projet vers Firestore (indépendant de [id], propre à chaque appareil). */
+    val firebaseId: String = UUID.randomUUID().toString(),
     val createdAt: Long = System.currentTimeMillis()
 )

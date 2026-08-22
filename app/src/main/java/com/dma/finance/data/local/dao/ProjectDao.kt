@@ -26,6 +26,9 @@ interface ProjectDao {
     @Query("SELECT * FROM projects WHERE id = :projectId LIMIT 1")
     suspend fun findById(projectId: Long): ProjectEntity?
 
+    @Query("SELECT * FROM projects WHERE firebaseId = :firebaseId LIMIT 1")
+    suspend fun findByFirebaseId(firebaseId: String): ProjectEntity?
+
     /** Tous les projets auxquels l'utilisateur appartient, propriétaire ou simple membre. */
     @Query(
         """

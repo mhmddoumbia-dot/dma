@@ -4,6 +4,7 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
+import java.util.UUID
 
 /**
  * Association entre un utilisateur et un projet, avec un rôle. C'est cette table
@@ -34,5 +35,9 @@ data class ProjectMemberEntity(
     val projectId: Long,
     val userId: Long,
     val role: ProjectRole,
+    /** Identifiant stable utilisé pour synchroniser cette adhésion vers Firestore. */
+    val firebaseId: String = UUID.randomUUID().toString(),
+    /** UID Firebase du membre, résolu dès que son adresse e-mail est connue côté cloud (peut rester null tant qu'il ne s'est jamais connecté). */
+    val memberFirebaseUid: String? = null,
     val joinedAt: Long = System.currentTimeMillis()
 )

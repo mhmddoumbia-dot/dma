@@ -3,6 +3,7 @@ package com.dma.finance.data.repository
 import com.dma.finance.data.local.dao.UserDao
 import com.dma.finance.data.local.entity.UserEntity
 import com.dma.finance.data.remote.FirebaseAuthBridge
+import com.dma.finance.data.remote.FirestoreProjectSync
 import com.dma.finance.data.security.PasswordHasher
 import com.dma.finance.data.session.SessionManager
 import kotlinx.coroutines.CoroutineScope
@@ -32,7 +33,8 @@ class AuthRepository @Inject constructor(
     private val userDao: UserDao,
     private val passwordHasher: PasswordHasher,
     private val sessionManager: SessionManager,
-    private val firebaseAuthBridge: FirebaseAuthBridge
+    private val firebaseAuthBridge: FirebaseAuthBridge,
+    private val firestoreProjectSync: FirestoreProjectSync
 ) {
     private val backgroundScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
@@ -55,7 +57,10 @@ class AuthRepository @Inject constructor(
         )
         val id = userDao.insert(user)
         sessionManager.setCurrentUser(id)
-        backgroundScope.launch { firebaseAuthBridge.ensureSignedIn(trimmedEmail, password) }
+        backgroundScope.launch {
+            val uid = firebaseAuthBridge.ensureSignedIn(trimmedEmail, password)
+            if (uid != null) firestoreProjectSync.reconcileUnresolvedMemberships(trimmedEmail, uid)
+        }
         return AuthResult.Success(user.copy(id = id))
     }
 
@@ -66,7 +71,10 @@ class AuthRepository @Inject constructor(
         val valid = passwordHasher.verify(password, user.passwordSalt, user.passwordHash)
         if (!valid) return AuthResult.Error("INVALID_CREDENTIALS")
         sessionManager.setCurrentUser(user.id)
-        backgroundScope.launch { firebaseAuthBridge.ensureSignedIn(trimmedEmail, password) }
+        backgroundScope.launch {
+            val uid = firebaseAuthBridge.ensureSignedIn(trimmedEmail, password)
+            if (uid != null) firestoreProjectSync.reconcileUnresolvedMemberships(trimmedEmail, uid)
+        }
         return AuthResult.Success(user)
     }
 
