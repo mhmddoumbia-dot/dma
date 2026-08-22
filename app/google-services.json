@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1068461176232",
+    "project_id": "gestion-finances-122a7",
+    "storage_bucket": "gestion-finances-122a7.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1068461176232:android:5db46bfeb04285a43c199d",
+        "android_client_info": {
+          "package_name": "com.dma.finance"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAA9JC4XuUg-_ZoK1yHeG4TqlMs4UaIvcQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
