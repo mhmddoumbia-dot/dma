@@ -2,7 +2,6 @@ package com.dma.finance.ui.projects
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -17,18 +16,12 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExposedDropdownMenuBox
-import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -48,15 +41,15 @@ import com.dma.finance.R
 import com.dma.finance.data.local.entity.ProjectRole
 import com.dma.finance.data.local.relation.ProjectMemberWithUser
 
-@OptIn(androidx.compose.material3.ExperimentalMaterial3Api::class)
+@androidx.compose.material3.ExperimentalMaterial3Api
 @Composable
 fun ProjectMembersScreen(
     onBack: () -> Unit,
+    onAddMember: () -> Unit,
     viewModel: ProjectMembersViewModel = hiltViewModel()
 ) {
     val members by viewModel.members.collectAsState()
     val myRole by viewModel.myRole.collectAsState()
-    var showAddDialog by remember { mutableStateOf(false) }
     val canManage = myRole?.canManageMembers() == true
 
     Scaffold(
@@ -72,7 +65,7 @@ fun ProjectMembersScreen(
         },
         floatingActionButton = {
             if (canManage) {
-                FloatingActionButton(onClick = { showAddDialog = true }) {
+                FloatingActionButton(onClick = onAddMember) {
                     Icon(Icons.Default.Add, contentDescription = stringResource(R.string.projects_invite_member))
                 }
             }
@@ -94,16 +87,6 @@ fun ProjectMembersScreen(
                 )
             }
         }
-    }
-
-    if (showAddDialog) {
-        AddMemberDialog(
-            onDismiss = { showAddDialog = false },
-            onConfirm = { email, role ->
-                viewModel.addMember(email, role)
-                showAddDialog = false
-            }
-        )
     }
 }
 
@@ -127,7 +110,7 @@ private fun MemberRow(
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(Icons.Default.Person, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
                 Spacer(modifier = Modifier.size(8.dp))
-                Column {
+                androidx.compose.foundation.layout.Column {
                     Text(text = memberWithUser.user.fullName, style = MaterialTheme.typography.bodyLarge)
                     Text(text = memberWithUser.user.email, style = MaterialTheme.typography.bodyMedium)
                 }
@@ -166,72 +149,9 @@ private fun MemberRow(
 }
 
 @Composable
-private fun roleLabel(role: ProjectRole): String = when (role) {
+internal fun roleLabel(role: ProjectRole): String = when (role) {
     ProjectRole.OWNER -> stringResource(R.string.projects_role_owner)
     ProjectRole.ADMIN -> stringResource(R.string.projects_role_admin)
     ProjectRole.MEMBER -> stringResource(R.string.projects_role_member)
     ProjectRole.VIEWER -> stringResource(R.string.projects_role_viewer)
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun AddMemberDialog(
-    onDismiss: () -> Unit,
-    onConfirm: (String, ProjectRole) -> Unit
-) {
-    var email by remember { mutableStateOf("") }
-    var role by remember { mutableStateOf(ProjectRole.MEMBER) }
-    var roleMenuExpanded by remember { mutableStateOf(false) }
-
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        title = { Text(stringResource(R.string.projects_invite_member)) },
-        text = {
-            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                OutlinedTextField(
-                    value = email,
-                    onValueChange = { email = it },
-                    label = { Text(stringResource(R.string.auth_email)) },
-                    singleLine = true,
-                    modifier = Modifier.fillMaxWidth()
-                )
-                ExposedDropdownMenuBox(
-                    expanded = roleMenuExpanded,
-                    onExpandedChange = { roleMenuExpanded = it }
-                ) {
-                    OutlinedTextField(
-                        value = roleLabel(role),
-                        onValueChange = {},
-                        readOnly = true,
-                        trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = roleMenuExpanded) },
-                        modifier = Modifier
-                            .menuAnchor()
-                            .fillMaxWidth()
-                    )
-                    ExposedDropdownMenu(
-                        expanded = roleMenuExpanded,
-                        onDismissRequest = { roleMenuExpanded = false }
-                    ) {
-                        listOf(ProjectRole.ADMIN, ProjectRole.MEMBER, ProjectRole.VIEWER).forEach { r ->
-                            DropdownMenuItem(
-                                text = { Text(roleLabel(r)) },
-                                onClick = {
-                                    role = r
-                                    roleMenuExpanded = false
-                                }
-                            )
-                        }
-                    }
-                }
-            }
-        },
-        confirmButton = {
-            Button(onClick = { onConfirm(email, role) }, enabled = email.isNotBlank()) {
-                Text(stringResource(R.string.action_confirm))
-            }
-        },
-        dismissButton = {
-            TextButton(onClick = onDismiss) { Text(stringResource(R.string.action_cancel)) }
-        }
-    )
 }

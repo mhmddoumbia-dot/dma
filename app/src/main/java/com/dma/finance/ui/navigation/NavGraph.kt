@@ -18,6 +18,7 @@ import com.dma.finance.ui.auth.RegisterScreen
 import com.dma.finance.ui.budgets.BudgetEditScreen
 import com.dma.finance.ui.categories.CategoryEditScreen
 import com.dma.finance.ui.categories.CategoryListScreen
+import com.dma.finance.ui.projects.AddMemberScreen
 import com.dma.finance.ui.projects.CreateProjectScreen
 import com.dma.finance.ui.projects.ProjectListScreen
 import com.dma.finance.ui.projects.ProjectMembersScreen
@@ -105,8 +106,16 @@ fun AppNavGraph() {
             )
         }
 
-        composable(Routes.PROJECT_MEMBERS, arguments = listOf(LONG_ARG)) {
-            ProjectMembersScreen(onBack = { navController.popBackStack() })
+        composable(Routes.PROJECT_MEMBERS, arguments = listOf(LONG_ARG)) { entry ->
+            val projectId = requireNotNull(entry.arguments).getLong("projectId")
+            ProjectMembersScreen(
+                onBack = { navController.popBackStack() },
+                onAddMember = { navController.navigate(Routes.addMember(projectId)) }
+            )
+        }
+
+        composable(Routes.ADD_MEMBER, arguments = listOf(LONG_ARG)) {
+            AddMemberScreen(onBack = { navController.popBackStack() })
         }
 
         composable(Routes.ACCOUNT_LIST, arguments = listOf(LONG_ARG)) { entry ->

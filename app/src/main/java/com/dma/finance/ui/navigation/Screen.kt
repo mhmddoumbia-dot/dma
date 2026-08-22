@@ -13,6 +13,9 @@ object Routes {
     const val PROJECT_MEMBERS = "project_members/{projectId}"
     fun projectMembers(projectId: Long) = "project_members/$projectId"
 
+    const val ADD_MEMBER = "add_member/{projectId}"
+    fun addMember(projectId: Long) = "add_member/$projectId"
+
     const val ACCOUNT_LIST = "accounts/{projectId}"
     fun accountList(projectId: Long) = "accounts/$projectId"
 
