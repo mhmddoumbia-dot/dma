@@ -1,5 +1,6 @@
 package com.dma.finance.data.remote
 
+import android.util.Log
 import com.dma.finance.data.local.dao.ProjectDao
 import com.dma.finance.data.local.dao.ProjectMemberDao
 import com.dma.finance.data.local.dao.UserDao
@@ -40,6 +41,10 @@ class FirestoreProjectSync @Inject constructor(
     private val firestore: FirebaseFirestore by lazy { FirebaseFirestore.getInstance() }
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private var listenerRegistration: ListenerRegistration? = null
+
+    private companion object {
+        const val TAG = "FirestoreSync"
+    }
 
     /** Pousse l'état complet local (projet + membres) vers Firestore. Best-effort, ne lève jamais. */
     suspend fun syncProjectToCloud(projectId: Long) {
@@ -104,6 +109,7 @@ class FirestoreProjectSync @Inject constructor(
             }
         } catch (e: Exception) {
             // Best-effort : la synchronisation réessaiera à la prochaine modification locale.
+            Log.e(TAG, "syncProjectToCloud a échoué pour le projet $projectId", e)
         }
     }
 
@@ -114,6 +120,9 @@ class FirestoreProjectSync @Inject constructor(
         listenerRegistration = firestore.collection("projects")
             .whereArrayContains("memberFirebaseUids", uid)
             .addSnapshotListener { snapshot, error ->
+                if (error != null) {
+                    Log.e(TAG, "Le listener Firestore a échoué", error)
+                }
                 if (error != null || snapshot == null) return@addSnapshotListener
                 for (change in snapshot.documentChanges) {
                     val doc = change.document
@@ -139,6 +148,7 @@ class FirestoreProjectSync @Inject constructor(
             }
         } catch (e: Exception) {
             // Best-effort.
+            Log.e(TAG, "reconcileUnresolvedMemberships a échoué pour $email", e)
         }
     }
 
@@ -213,6 +223,7 @@ class FirestoreProjectSync @Inject constructor(
             }
         } catch (e: Exception) {
             // Best-effort : la prochaine mise à jour distante corrigera l'état local.
+            Log.e(TAG, "applyRemoteProject a échoué pour $firebaseId", e)
         }
     }
 

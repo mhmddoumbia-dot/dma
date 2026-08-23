@@ -1,5 +1,6 @@
 package com.dma.finance.data.remote
 
+import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
@@ -38,6 +39,7 @@ class FirebaseAuthBridge @Inject constructor() {
             try {
                 auth.createUserWithEmailAndPassword(email, password).await().user?.uid
             } catch (createError: Exception) {
+                Log.e(TAG, "Connexion et création de compte Firebase ont échoué pour $email", createError)
                 null
             }
         }
@@ -55,18 +57,18 @@ class FirebaseAuthBridge @Inject constructor() {
                 .get().await()
                 .getString("uid")
         } catch (e: Exception) {
+            Log.e(TAG, "resolveUidForEmail a échoué pour $email", e)
             null
         }
     }
 
     private fun registerEmailDirectory(email: String, uid: String) {
-        try {
-            firestore.collection("usersByEmail")
-                .document(email.trim().lowercase())
-                .set(mapOf("uid" to uid))
-        } catch (e: Exception) {
-            // Ignoré : ce n'est qu'un annuaire best-effort.
-        }
+        firestore.collection("usersByEmail")
+            .document(email.trim().lowercase())
+            .set(mapOf("uid" to uid))
+            .addOnFailureListener { e ->
+                Log.e(TAG, "registerEmailDirectory a échoué pour $email", e)
+            }
     }
 
     fun signOut() {
@@ -75,5 +77,9 @@ class FirebaseAuthBridge @Inject constructor() {
         } catch (e: Exception) {
             // Ignoré : la déconnexion locale prime.
         }
+    }
+
+    private companion object {
+        const val TAG = "FirebaseAuthBridge"
     }
 }
