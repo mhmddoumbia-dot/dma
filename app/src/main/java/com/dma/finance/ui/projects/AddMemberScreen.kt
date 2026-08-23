@@ -91,7 +91,7 @@ fun AddMemberScreen(
                         .menuAnchor()
                         .fillMaxWidth()
                 )
-                androidx.compose.material3.ExposedDropdownMenu(
+                ExposedDropdownMenu(
                     expanded = roleMenuExpanded,
                     onDismissRequest = { roleMenuExpanded = false }
                 ) {
